@@ -10,7 +10,7 @@
 python3 -m http.server 8000
 ```
 
-브라우저에서 `http://localhost:8000/games/hyundai-merge/`에 접속합니다.
+브라우저에서 `http://localhost:8000/game/hyundai-merge/`에 접속합니다.
 `index.html`과 `assets/`를 함께 유지해야 합니다. `assets/` PNG 파일을 같은 이름으로 바꾸면 이미지가 교체됩니다.
 원본 안내에 언급된 이미지 내장형 `HYUNDAI_MERGE_바로실행.html`은 제공된 ZIP에 없어 이 저장소에는 포함되어 있지 않습니다.
 
@@ -50,8 +50,32 @@ python3 -m http.server 8000
 
 ## 무료 URL 공유
 
-GitHub Pages: 저장소 Settings → Pages → Deploy from a branch에서 `main` 브랜치와 `/ (root)`를 선택합니다. 게시 후 사이트 주소의 `/games/hyundai-merge/` 경로에서 플레이할 수 있습니다. 이 설정은 저장소 소유자가 별도로 적용해야 합니다.
+GitHub Pages: 저장소 Settings → Pages → Deploy from a branch에서 `main` 브랜치와 `/ (root)`를 선택합니다. 게시 후 사이트 주소의 `/game/hyundai-merge/` 경로에서 플레이할 수 있습니다. 이 설정은 저장소 소유자가 별도로 적용해야 합니다.
 
 Cloudflare Pages: ZIP을 풀고 `hyundai-merge` 폴더의 내용을 정적 사이트 파일로 업로드합니다.
 
 이 소스는 사용자가 제공한 차량 이미지를 기반으로 제작한 비공식 팬 게임이며 현대자동차의 공식 게임이 아닙니다.
+
+
+## 기획 및 담당 역할
+
+현대자동차 차종을 수박게임의 합성 구조에 적용한 웹게임입니다. 같은 차량을 합성하면서 새로운 차종을 발견하고, 최종 단계인 유니버스 완성을 목표로 합니다.
+
+### 담당한 일
+
+- 9종 차량과 8개의 합성 관계로 구성된 성장 구조 기획
+- 승용차, SUV, 승합차, 트럭, 버스 등 외형이 구분되는 차종 선정 및 이미지 수집
+- 가까운 단계에서 혼동하지 않도록 2단계 이내 차량에 서로 다른 색상 적용
+- 차량별 등장 확률, 합성 점수, 충돌체 크기, 게임오버 조건 정의
+- 말·폭탄·다운그레이드 아이템 3종의 효과와 등장 조건 구체화
+- ChatGPT를 활용한 규칙 설계 및 웹게임 제작
+
+### 구현 및 점검
+
+HTML5 Canvas와 JavaScript, Matter.js로 중력 낙하, 차량 충돌, 합성 동작을 구현하고 실제 차량 이미지를 에셋으로 적용했습니다. localStorage로 최고 점수를 저장하도록 구성했습니다. 동일 차량 합성, 최종 단계의 추가 합성 방지, 아이템 효과를 코드 수준에서 점검했습니다.
+
+**사용 기술:** HTML5 Canvas, JavaScript, Matter.js, localStorage, ChatGPT
+
+**결과:** 9단계 성장 구조와 특수 아이템 3종을 포함한 합성 게임 제작. 실제 플레이 인원과 최고 점수는 미확인입니다.
+
+**연결 역량:** 시스템 규칙 설계, 예외 조건 정의, SW 로직 검토
