@@ -16,7 +16,7 @@
 python3 -m http.server 8000
 ```
 
-- 자동차 방탈출: [elaborate-cassata-f398fd.netlify.app](elaborate-cassata-f398fd.netlify.app)
+- 자동차 방탈출: [elaborate-cassata-f398fd.netlify.app](https://elaborate-cassata-f398fd.netlify.app/)
 - HYUNDAI MERGE: [https://steady-meerkat-333e61.netlify.app/](https://steady-meerkat-333e61.netlify.app/)
 
 자동차 방탈출은 HTML 파일을 직접 열어도 실행됩니다. HYUNDAI MERGE는 온라인에서 Matter.js 0.20.0을 CDN으로 불러오며, 연결할 수 없으면 내장 물리 엔진을 사용합니다.
