@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f6fa" />
+<title>HYUNDAI MERGE | 현대자동차 수박게임</title>
+<style>
+  :root {--ink:#162a47;--muted:#6f7e91;--line:#e2e9f2;--blue:#214f9d;--cream:#f7f9fd;--card:#ffffff;--pink:#fa5e73;--shadow:0 14px 45px #244d8120}
+  *{box-sizing:border-box}html{background:var(--cream);min-height:100%;-webkit-text-size-adjust:100%}
+  body{margin:0;min-height:100vh;color:var(--ink);font-family:'Nunito','Noto Sans KR',system-ui,sans-serif;background:radial-gradient(ellipse 65% 40% at 50% -8%,#d9ecff 0%,transparent 92%),#f6f9ff;overflow-x:hidden}
+  button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #6d9bf4;outline-offset:3px}
+  .wrap{width:min(1090px,calc(100% - 34px));margin:0 auto;padding:25px 0 36px}
+  .header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:19px}
+  .branding{display:flex;gap:12px;align-items:center}.brand-mark{display:grid;place-items:center;background:linear-gradient(142deg,#1e559a,#0b2c57);width:46px;height:46px;border-radius:16px;color:#fff;font-size:23px;box-shadow:0 5px 14px #17448235}
+  .branding h1{font-size:clamp(21px,3vw,28px);letter-spacing:-.045em;line-height:1;margin:0;font-weight:900}.branding h1 span{color:#296cb7}.branding p{font-size:11px;margin:6px 0 0;color:#7c8aa0;font-weight:700;letter-spacing:.07em}
+  .header-actions{display:flex;gap:7px}.icon-button{border:1px solid #dce6f2;background:#fff;border-radius:13px;min-width:43px;height:43px;box-shadow:0 4px 10px #142c4510;color:var(--ink);font-size:19px;display:grid;place-items:center}.icon-button:hover{background:#eaf3fe}
+  .layout{display:grid;grid-template-columns:minmax(170px,1fr) minmax(330px,420px) minmax(180px,1fr);gap:17px;align-items:start}
+  .side{display:flex;flex-direction:column;gap:15px}.card{background:var(--card);border:1px solid #e7edf5;border-radius:22px;box-shadow:0 8px 20px #2454800e;padding:17px}
+  .eyebrow{font-size:11px;font-weight:900;letter-spacing:.16em;color:#91a1b3;margin:0 0 6px}.card h2{font-size:17px;font-weight:900;margin:0 0 12px;letter-spacing:-.05em}
+  .score-card{background:linear-gradient(155deg,#174779 0%,#12335e 92%);color:white;padding:19px}.score-card .eyebrow{color:#a7c3e8}.score{font-size:42px;line-height:1.15;font-weight:900;letter-spacing:-.05em;font-variant-numeric:tabular-nums;margin-bottom:14px}.best-row{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #ffffff24;font-size:13px;color:#c6d9f0}.best-row strong{font-size:19px;color:#fff}
+  .quick-tip{color:#65788d;font-size:12px;line-height:1.8;margin:3px 0}.quick-tip b{color:#2c5f9e}.key{display:inline-flex;min-width:21px;align-items:center;justify-content:center;padding:1px 5px;background:#f0f5fb;border:1px solid #dee7f3;border-radius:5px;font-weight:900;font-size:11px;color:#3d638c}
+  .board-column{min-width:0}.mobile-score{display:none}.game-frame{position:relative;border-radius:23px;background:#fff;overflow:hidden;border:5px solid #fff;box-shadow:0 14px 40px #33527d20,0 0 0 1px #e3ebf4}
+  #gameCanvas{display:block;width:100%;height:auto;aspect-ratio:420/650;touch-action:none;cursor:crosshair;background:#f1f9ff}
+  .game-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:21px;background:#eef6ffe8;backdrop-filter:blur(6px);z-index:3;text-align:center}
+  .game-overlay.hidden{display:none}.modal{width:min(340px,100%);max-height:100%;overflow:auto;background:#fff;border:1px solid #e6edf5;border-radius:24px;padding:28px 22px;box-shadow:0 20px 45px #153d6928}
+  .modal .over-emblem{font-size:56px;display:block;margin-bottom:9px}.modal h2{font-size:28px;letter-spacing:-.06em;margin:0 0 11px;font-weight:900}.modal p{color:#718097;font-size:13px;line-height:1.85;margin:0 0 17px}.modal-score{font-size:34px;font-weight:900;color:#214f9d;margin:4px 0 12px}.modal small{display:block;color:#7d8fa3;margin-bottom:16px}
+  .primary-btn{width:100%;background:linear-gradient(125deg,#397fe3,#1b57ac);border:none;border-radius:15px;color:#fff;font-size:15px;font-weight:900;padding:14px 18px;box-shadow:0 7px 14px #306fbd36}.primary-btn:hover{filter:brightness(1.04)}
+  .touch-controls{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:10px;margin-top:13px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+  .control-btn{height:54px;border:1px solid #d9e5f3;border-radius:15px;background:#fff;box-shadow:0 4px 9px #23496e12;color:#41639a;font-size:24px;font-weight:900;touch-action:none}
+  .control-btn.drop{background:#225db3;color:#fff;border-color:#225db3;font-size:16px;letter-spacing:.08em}.control-btn:active{transform:translateY(1px);filter:brightness(.95)}
+  .next-holder{display:grid;place-items:center;background:linear-gradient(140deg,#f3f8fe,#fff9ed);border:1px dashed #d6e3f0;border-radius:18px;min-height:135px}.next-holder canvas{width:120px;height:97px;object-fit:contain}.next-name{text-align:center;font-size:15px;font-weight:900;margin-top:6px}.next-desc{text-align:center;font-size:11px;color:#7b8a9a;min-height:15px;margin-top:3px}
+  .growth-list{display:flex;flex-direction:column;gap:4px}.growth-step{display:flex;align-items:center;gap:7px;padding:3px 6px;border-radius:10px}.growth-step.reached{background:#eaf6ff}.grow-num{font-size:10px;font-weight:900;color:#99a5b4;width:15px}.grow-preview{width:56px;height:33px;object-fit:contain}.grow-fallback{display:grid;place-items:center;font-size:12px;background:#fff0e4;border-radius:8px}.grow-name{font-size:12px;font-weight:800;white-space:nowrap;flex:1}.grow-score{font-size:11px;color:#8095ae;font-weight:800}
+  .items-mini{display:flex;flex-wrap:wrap;gap:8px}.items-mini span{border-radius:100px;background:#f3f7fc;border:1px solid #e6edf6;padding:5px 7px;font-size:11px;color:#637991;font-weight:800}
+  .footnote{text-align:center;color:#8493a5;font-size:11px;margin:18px auto 0;line-height:1.8}
+  .mobile-grow{display:none}.desktop-help{display:block}.bottom-note{font-size:11px;text-align:center;color:#8594aa;margin-top:8px}
+  @media(max-width:900px){.mobile-score{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid #e5edf5;border-radius:14px;padding:10px 13px;margin-bottom:10px;box-shadow:0 5px 10px #24548010;font-size:13px;font-weight:800}.mobile-score strong{color:#2359a7;font-size:20px;font-variant-numeric:tabular-nums}.layout{grid-template-columns:minmax(0,1fr) minmax(310px,420px);max-width:760px;margin:auto}.left-side{display:none}.right-side{grid-column:1;grid-row:1}.board-column{grid-column:2;grid-row:1}.right-side .growth-card{display:none}.score-card{display:block}.mobile-grow{display:block;max-width:420px;margin:15px auto 0}.mobile-grow summary{font-weight:900;padding:12px 16px;cursor:pointer}.mobile-grow .card{padding-top:0}.mobile-grow .growth-list{display:grid;grid-template-columns:1fr 1fr}}
+  @media(max-width:610px){.wrap{width:min(440px,calc(100% - 22px));padding-top:12px}.header{margin-bottom:10px}.brand-mark{width:38px;height:38px;border-radius:12px;font-size:19px}.branding{gap:8px}.branding h1{font-size:21px}.branding p{font-size:9px;margin-top:4px}.header-actions{gap:5px}.icon-button{min-width:36px;height:36px;border-radius:10px;font-size:17px}.layout{display:flex;flex-direction:column;gap:10px}.board-column{width:100%;order:2}.right-side{display:contents}.right-side .next-card{order:3;display:flex;align-items:center;gap:12px;padding:9px 12px}.right-side .next-holder{width:84px;min-height:64px;flex:0 0 84px}.right-side .next-holder canvas{width:82px;height:62px}.right-side .next-card h2{margin:0 0 4px;font-size:13px}.right-side .next-name{text-align:left;margin:0}.right-side .next-desc{text-align:left}.game-frame{border-radius:19px}.touch-controls{margin-top:9px}.control-btn{height:50px}.mobile-grow{margin-top:10px}.footnote{font-size:10px}.board-column .bottom-note{display:none}}
+  @media(min-width:611px){.touch-controls{display:none}}
+  @media(max-height:750px) and (min-width:611px){.wrap{padding-top:12px}.header{margin-bottom:10px}.game-frame{max-width:390px;margin:auto}.touch-controls{display:none}}
+  @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important}}
+</style>
+<script>window.__IMAGE_OVERRIDES__ = {};</script>
+<!-- Matter.js powers the normal online game. Offline fallback below retains playable physics. -->
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+<header class="header">
+  <div class="branding"><div class="brand-mark">H</div><div><h1>HYUNDAI <span>MERGE</span></h1><p>현대자동차 수박게임 · CAR MERGE PUZZLE</p></div></div>
+  <div class="header-actions"><button class="icon-button" id="pauseBtn" aria-label="일시정지" title="일시정지 (P)">Ⅱ</button><button class="icon-button" id="muteBtn" aria-label="소리 켜기/끄기" title="사운드">♫</button><button class="icon-button" id="restartBtn" aria-label="처음부터 다시 시작" title="재시작 (R)">↻</button></div>
+</header>
+<div class="layout">
+  <aside class="side left-side">
+    <section class="card score-card"><p class="eyebrow">CURRENT SCORE</p><div class="score" id="scoreLeft">0</div><div class="best-row"><span>🏆 최고 점수</span><strong id="bestLeft">0</strong></div></section>
+    <section class="card"><p class="eyebrow">HOW TO PLAY</p><h2>합쳐서 더 크게! 🚗</h2><p class="quick-tip">같은 자동차 <b>2대가 닿으면</b> 다음 단계로 업그레이드!</p><p class="quick-tip">같은 차종끼리 계속 합쳐서 마지막 <b>유니버스</b>를 만들어 봐.</p><p class="quick-tip">빨간 <b>위험선 위</b>로 쌓이면 위험해!</p><div style="height:8px"></div><p class="quick-tip"><span class="key">←</span> <span class="key">→</span> 이동</p><p class="quick-tip"><span class="key">SPACE</span> 떨어뜨리기</p><p class="quick-tip"><span class="key">P</span> 일시정지</p></section>
+    <section class="card"><p class="eyebrow">RARE ITEMS</p><h2>가끔 나타나는 도움!</h2><div class="items-mini"><span>🐴 말: 1대 삭제</span><span>💣 폭탄: 범위 삭제</span><span>⬇️ 한 단계 내리기</span></div></section>
+  </aside>
+  <main class="board-column">
+    <div class="mobile-score"><span>⭐ 점수 <strong id="scoreMobile">0</strong></span><span>🏆 최고 <strong id="bestMobile">0</strong></span></div>
+    <section class="game-frame" id="gameFrame"><canvas id="gameCanvas" width="840" height="1300" aria-label="현대자동차 수박게임 게임판"></canvas>
+      <div class="game-overlay" id="gameOverlay"><div class="modal"><span class="over-emblem" id="overlayIcon">🚘</span><h2 id="overlayTitle">같은 차를 합쳐봐!</h2><p id="overlayDesc">차량을 떨어뜨리고 같은 모델끼리 합치면 더 큰 차로 진화해요. 9단계 유니버스까지 도전!</p><div class="modal-score" id="overlayScore" style="display:none">0</div><small id="overlayExtra">마우스 · 키보드 · 스마트폰 터치 지원</small><button class="primary-btn" id="overlayButton">게임 시작 🚗</button></div></div>
+    </section>
+    <div class="touch-controls"><button class="control-btn" id="leftBtn" aria-label="왼쪽 이동">◀</button><button class="control-btn drop" id="dropBtn" aria-label="낙하">DROP ↓</button><button class="control-btn" id="rightBtn" aria-label="오른쪽 이동">▶</button></div>
+    <p class="bottom-note">화면에서 좌우로 움직여 위치를 정하고, 클릭하거나 손을 떼면 떨어져요.</p>
+  </main>
+  <aside class="side right-side">
+    <section class="card next-card"><div><p class="eyebrow">NEXT UP</p><h2>다음 차례</h2><div class="next-name" id="nextName">캐스퍼</div><div class="next-desc" id="nextDesc">준비 중</div></div><div class="next-holder"><canvas id="nextCanvas" width="240" height="190"></canvas></div></section>
+    <section class="card growth-card"><p class="eyebrow">EVOLUTION</p><h2>성장 단계 <span style="color:#a5b7c6;font-size:12px">1 → 9</span></h2><div class="growth-list" id="growthList"></div></section>
+  </aside>
+</div>
+<details class="mobile-grow"><summary>🚗 자동차 성장 순서 보기 (1~9단계)</summary><div class="card"><div class="growth-list" id="mobileGrowthList"></div></div></details>
+<p class="footnote">HYUNDAI MERGE · 팬메이드 비공식 캐주얼 게임 · 차량 사진은 제공된 원본을 사용합니다.<br/>사진 교체: assets 폴더의 같은 이름 PNG를 변경하면 됩니다.</p>
+</div>
+<script>
+'use strict';
+/* Offline fallback: if Matter.js CDN is unavailable, this compatible lightweight
+   circle-rigid-body engine keeps the game fully playable from a local file. */
+if (!window.Matter) {
+  window.Matter = (() => {
+    let serial=0;
+    const make=(x,y,opts={})=>({id:++serial,position:{x,y},velocity:{x:0,y:0},angle:0,angularVelocity:0,speed:0,plugin:{},isStatic:!!opts.isStatic,friction:opts.friction??.45,frictionStatic:opts.frictionStatic??.6,restitution:opts.restitution??.15,frictionAir:opts.frictionAir??.006});
+    const Bodies={circle(x,y,r,opts={}){const b=make(x,y,opts);b.circleRadius=r;b.mass=Math.max(1,r*r/400);return b;},rectangle(x,y,w,h,opts={}){const b=make(x,y,{...opts,isStatic:true});b.rect={w,h};b.mass=Infinity;return b;}};
+    const World={add(world,objects){for(const b of [].concat(objects)){if(!world.bodies.includes(b))world.bodies.push(b);}},remove(world,b){const i=world.bodies.indexOf(b);if(i>=0)world.bodies.splice(i,1);}};
+    const Events={on(engine,type,cb){(engine._callbacks[type]??=[]).push(cb);}};
+    const Body={setVelocity(b,v){b.velocity={...v};},setAngularVelocity(b,v){b.angularVelocity=v;},setPosition(b,v){b.position={...v};}};
+    function resolvePair(a,b){
+      const dx=b.position.x-a.position.x,dy=b.position.y-a.position.y;let nx,ny,penetration;
+      if(b.rect || a.rect){const c=b.rect?a:b;const wall=b.rect?b:a;const hw=wall.rect.w/2,hh=wall.rect.h/2;
+        const cx=Math.max(wall.position.x-hw,Math.min(c.position.x,wall.position.x+hw));const cy=Math.max(wall.position.y-hh,Math.min(c.position.y,wall.position.y+hh));
+        let xx=c.position.x-cx,yy=c.position.y-cy;let d=Math.hypot(xx,yy);
+        if(d>=c.circleRadius)return null;
+        if(d<.001){const distLeft=Math.abs(c.position.x-(wall.position.x-hw));const distRight=Math.abs(c.position.x-(wall.position.x+hw));const distTop=Math.abs(c.position.y-(wall.position.y-hh));const distBottom=Math.abs(c.position.y-(wall.position.y+hh));const md=Math.min(distLeft,distRight,distTop,distBottom);xx=md===distLeft?-1:md===distRight?1:0;yy=md===distTop?-1:md===distBottom?1:0;d=1;}
+        nx=xx/d;ny=yy/d;penetration=c.circleRadius-d;
+        c.position.x+=nx*penetration;c.position.y+=ny*penetration;
+        const vn=c.velocity.x*nx+c.velocity.y*ny;
+        if(vn<0){c.velocity.x-=(1+c.restitution)*vn*nx;c.velocity.y-=(1+c.restitution)*vn*ny;}
+        if(Math.abs(ny)>.5){c.velocity.x*=.92;c.angularVelocity*=.80;}else c.velocity.y*=.95;
+        return {bodyA:a,bodyB:b,collision:{supports:[{x:cx,y:cy}]}};
+      }
+      const r=a.circleRadius+b.circleRadius, d=Math.hypot(dx,dy);
+      if(d>=r)return null;
+      const dist=Math.max(.001,d);nx=d>.001?dx/dist:1;ny=d>.001?dy/dist:0;penetration=r-dist;
+      const imA=1/a.mass,imB=1/b.mass,sum=imA+imB;
+      a.position.x-=nx*penetration*imA/sum*.94;a.position.y-=ny*penetration*imA/sum*.94;
+      b.position.x+=nx*penetration*imB/sum*.94;b.position.y+=ny*penetration*imB/sum*.94;
+      let rvx=b.velocity.x-a.velocity.x,rvy=b.velocity.y-a.velocity.y;
+      let vn=rvx*nx+rvy*ny;
+      if(vn<0){const impulse=-(1+Math.min(a.restitution,b.restitution))*vn/sum;
+        a.velocity.x-=impulse*nx*imA;a.velocity.y-=impulse*ny*imA;
+        b.velocity.x+=impulse*nx*imB;b.velocity.y+=impulse*ny*imB;
+        const tx=-ny,ty=nx,vt=rvx*tx+rvy*ty,fr=Math.min(Math.abs(vt)/sum,impulse*.18)*Math.sign(vt);
+        a.velocity.x+=fr*tx*imA;a.velocity.y+=fr*ty*imA;
+        b.velocity.x-=fr*tx*imB;b.velocity.y-=fr*ty*imB;
+        a.angularVelocity-=vt*.0005;b.angularVelocity+=vt*.0005;
+      }
+      return {bodyA:a,bodyB:b,collision:{supports:[{x:(a.position.x+b.position.x)/2,y:(a.position.y+b.position.y)/2}]}};
+    }
+    const Engine={create(){return {world:{bodies:[]},gravity:{x:0,y:1},_callbacks:{},_lastContacts:new Set()};},update(e,delta){
+      const f=delta/(1000/60), bodies=e.world.bodies;
+      for(const b of bodies){if(b.isStatic)continue;
+        b.velocity.x=(b.velocity.x+e.gravity.x*.32*f)*(1-b.frictionAir);
+        b.velocity.y=(b.velocity.y+e.gravity.y*.32*f)*(1-b.frictionAir);
+        b.position.x+=b.velocity.x*f;b.position.y+=b.velocity.y*f;
+        b.angle+=b.angularVelocity*f;b.angularVelocity*=.993;
+      }
+      const contacts=new Map();
+      for(let k=0;k<5;k++)for(let i=0;i<bodies.length;i++){
+        const a=bodies[i];if(a.isStatic)continue;
+        for(let j=0;j<bodies.length;j++){
+          if(i===j)continue;const b=bodies[j];if(!b.isStatic && j<i)continue;
+          const pair=resolvePair(a,b);
+          if(pair){const key=Math.min(a.id,b.id)+'-'+Math.max(a.id,b.id);if(!contacts.has(key))contacts.set(key,pair);}
+        }
+      }
+      const start=[];for(const [key,pair] of contacts){if(!e._lastContacts.has(key))start.push(pair);}
+      e._lastContacts=new Set(contacts.keys());
+      for(const b of bodies)if(!b.isStatic)b.speed=Math.hypot(b.velocity.x,b.velocity.y);
+      if(start.length)for(const cb of(e._callbacks.collisionStart||[]))cb({pairs:start});
+    }};
+    return {Engine,Bodies,Body,World,Events};
+  })();
+}
+const {Engine,World,Bodies,Body,Events} = Matter;
+const W=420,H=650,FLOOR=639,DANGER=137,STEP=1000/60;
+const COLORS=['#FFD54F','#78C8F5','#4267C9','#6FBF73','#76D9C4','#F16B6B','#F4A340','#9873CE','#319EAB'];
+const CARS=[
+  {key:'casper',name:'캐스퍼',diameter:42,score:0},
+  {key:'avante',name:'아반떼',diameter:52,score:2},
+  {key:'sonata',name:'쏘나타',diameter:63,score:4},
+  {key:'santafe',name:'싼타페',diameter:76,score:8},
+  {key:'staria',name:'스타리아',diameter:92,score:16},
+  {key:'porter2',name:'포터 II',diameter:108,score:32},
+  {key:'mighty',name:'마이티',diameter:128,score:64},
+  {key:'xcient',name:'엑시언트',diameter:154,score:128},
+  {key:'universe',name:'유니버스',diameter:188,score:256}
+].map((c,i)=>({...c,color:COLORS[i],file:`assets/${c.key}.png`}));
+const ITEMS={horse:{name:'말',desc:'차량 한 대 삭제',color:'#C88459',diameter:42},bomb:{name:'폭탄',desc:'반경 75px 차량 삭제',color:'#F16B6B',diameter:44},down:{name:'다운그레이드',desc:'차량 한 단계 낮추기',color:'#9873CE',diameter:40}};
+const IMAGES={};const canvas=document.getElementById('gameCanvas'),ctx=canvas.getContext('2d');
+const nextCanvas=document.getElementById('nextCanvas'),nctx=nextCanvas.getContext('2d');
+const $=id=>document.getElementById(id);
+const state={mode:'ready',engine:null,current:null,next:null,serial:0,forcedNormalUntil:-1,drops:0,spawnX:210,lastDropAt:-99999,score:0,best:0,maxTier:0,combo:0,lastMerge:-99999,firstUniverse:false,risk:0,riskOn:false,particles:[],floating:[],pulses:[],cameraShake:0,muted:false,audio:null,keys:new Set(),controlDir:0,pendingItems:new Map(),pendingMerges:[],engineName:window.Matter.Engine.create.toString().includes('_callbacks')?'fallback':'matter',lastImpact:0};
+const now=()=>performance.now();
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function alpha(hex,a){let v=hex.replace('#','');return `rgba(${parseInt(v.slice(0,2),16)},${parseInt(v.slice(2,4),16)},${parseInt(v.slice(4,6),16)},${a})`;}
+try{state.best=+localStorage.getItem('hyundai-merge-best')||0;}catch(e){}
+function saveBest(){if(state.score>state.best){if(!state.newRecordShown&&state.score>0){state.newRecordShown=true;floating(W/2,52,'NEW RECORD!','#dca522',17);sparkle(W/2,58,'#f7cb52',12);}state.best=state.score;try{localStorage.setItem('hyundai-merge-best',String(state.best));}catch(e){}}}
+function loadImages(){for(const car of CARS){const img=new Image();IMAGES[car.key]=img;img.onload=()=>{img.ready=true;updateGrowth();drawNext();};img.onerror=()=>{img.ready=false;updateGrowth();drawNext();};img.src=(window.__IMAGE_OVERRIDES__||{})[car.key]||car.file;}}
+function roundRect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);}
+function sparkle(x,y,color,count=12,power=1){for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=(1.3+Math.random()*3.5)*power;state.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,life:.6+Math.random()*.35,size:2+Math.random()*4,color});}}
+function pulse(x,y,color,r=30){state.pulses.push({x,y,r,life:.38,color});}
+function floating(x,y,str,color='#306bb6',size=18){state.floating.push({x,y,str,color,size,life:1});}
+function playSound(type){if(state.muted)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!state.audio){state.audio=new AC();}if(state.audio.state==='suspended')state.audio.resume();const presets={drop:[[180,.07,'sine']],impact:[[115,.045,'triangle']],merge:[[440,.08,'sine'],[660,.09,'sine']],combo:[[680,.07,'triangle'],[870,.08,'sine']],horse:[[460,.09,'triangle'],[350,.1,'sine']],bomb:[[150,.13,'sawtooth'],[72,.17,'triangle']],down:[[590,.08,'sine'],[300,.12,'sine']],universe:[[440,.09,'sine'],[554,.13,'sine'],[660,.15,'sine'],[880,.22,'sine']],over:[[250,.18,'triangle'],[160,.25,'sine']]};let t=state.audio.currentTime;for(const [freq,dur,wave] of (presets[type]||[])){const osc=state.audio.createOscillator(),gain=state.audio.createGain();osc.type=wave;osc.frequency.setValueAtTime(freq,t);gain.gain.setValueAtTime(.05,t);gain.gain.exponentialRampToValueAtTime(.001,t+dur);osc.connect(gain);gain.connect(state.audio.destination);osc.start(t);osc.stop(t+dur+.01);t+=dur*.8;}}catch(e){}}
+function sampleNormal(){let r=Math.random();if(r<.45)return 0;if(r<.75)return 1;if(r<.93)return 2;return 3;}
+function generateEntry(){const i=state.serial++;if(i<5||i<=state.forcedNormalUntil)return {kind:'car',tier:sampleNormal()};const p=Math.random();if(p<.02){state.forcedNormalUntil=i+5;return {kind:'item',item:'horse'};}if(p<.04){state.forcedNormalUntil=i+5;return {kind:'item',item:'bomb'};}if(p<.06){state.forcedNormalUntil=i+5;return {kind:'item',item:'down'};}return {kind:'car',tier:sampleNormal()};}
+function radius(entry){return (entry.kind==='car'?CARS[entry.tier].diameter:ITEMS[entry.item].diameter)/2;}
+function entityRadius(b){return b.circleRadius;}
+function newBody(entry,x,y,opts={}){const r=radius(entry);const b=Bodies.circle(x,y,r,{restitution:.15,friction:.45,frictionStatic:.6,frictionAir:.006,slop:.02});b.plugin.hm={...entry,active:true,birth:now(),pending:false,popUntil:opts.popUntil||0};World.add(state.engine.world,b);if(opts.velocity)Body.setVelocity(b,opts.velocity);if(opts.spin)Body.setAngularVelocity(b,opts.spin);return b;}
+function removeEntity(b){if(!b?.plugin.hm?.active)return false;b.plugin.hm.active=false;state.pendingItems.delete(b.id);World.remove(state.engine.world,b);return true;}
+function createEngine(){const engine=Engine.create();engine.gravity.y=1.12;engine.gravity.x=0;engine.enableSleeping=false;const wallOpts={isStatic:true,friction:.55,restitution:.12};const left=Bodies.rectangle(-22,325,44,850,wallOpts),right=Bodies.rectangle(442,325,44,850,wallOpts),floor=Bodies.rectangle(210,662,470,46,wallOpts);left.plugin.hm={kind:'wall'};right.plugin.hm={kind:'wall'};floor.plugin.hm={kind:'floor'};World.add(engine.world,[left,right,floor]);Events.on(engine,'collisionStart',ev=>onCollisions(ev.pairs));return engine;}
+function onCollisions(pairs){for(const pair of pairs){const a=pair.bodyA,b=pair.bodyB,ma=a.plugin.hm,mb=b.plugin.hm;if(!ma||!mb)continue;
+    for(const [item,target] of [[a,b],[b,a]]){const mi=item.plugin.hm,mt=target.plugin.hm;if(mi?.kind!=='item'||!mi.active||mi.pending||!mt||mt.kind==='item')continue;const priority=mt.kind==='car'?3:mt.kind==='floor'?2:mt.kind==='wall'?1:0;if(!priority)continue;const prev=state.pendingItems.get(item.id);const ix=pair.collision?.supports?.[0]?.x??item.position.x,iy=pair.collision?.supports?.[0]?.y??item.position.y;const dist=Math.hypot(target.position.x-item.position.x,target.position.y-item.position.y);if(!prev||priority>prev.priority||(priority===prev.priority&&dist<prev.dist)){state.pendingItems.set(item.id,{item,target,priority,dist,x:ix,y:iy});}}
+    if(ma.kind==='car'&&mb.kind==='car'&&ma.active&&mb.active&&ma.tier===mb.tier&&ma.tier<8){state.pendingMerges.push([a,b]);}
+    if(ma.kind==='car'&&mb.kind==='floor'||mb.kind==='car'&&ma.kind==='floor'){if(now()-state.lastImpact>170){state.lastImpact=now();playSound('impact');}}
+  }}
+function processEffects(){
+  const its=[...state.pendingItems.values()];state.pendingItems.clear();
+  its.sort((a,b)=>b.priority-a.priority);const used=new Set();
+  for(const ev of its){const item=ev.item,target=ev.target;if(!item.plugin.hm.active||used.has(item.id))continue;used.add(item.id);const type=item.plugin.hm.item;const pt={x:clamp(ev.x,2,W-2),y:clamp(ev.y,0,FLOOR)};
+    if(type==='horse'){if(target.plugin.hm.active&&target.plugin.hm.kind==='car'){removeEntity(target);sparkle(pt.x,pt.y,'#E3AD6B',16);pulse(pt.x,pt.y,'#E3AD6B');floating(pt.x,pt.y-15,'POOF!','#9D6F3F',19);}else sparkle(pt.x,pt.y,'#D9BC93',6);playSound('horse');}
+    else if(type==='bomb'){const cx=clamp(pt.x,0,W),cy=clamp(pt.y,0,FLOOR);let count=0;for(const b of [...state.engine.world.bodies]){if(b.plugin.hm?.kind!=='car'||!b.plugin.hm.active)continue;if(Math.hypot(b.position.x-cx,b.position.y-cy)<=75){removeEntity(b);count++;}}pulse(cx,cy,'#FF704E',75);sparkle(cx,cy,'#FF8E38',29,2);floating(cx,cy-15,count?`BOOM! -${count}`:'BOOM!','#E95047',21);state.cameraShake=6;playSound('bomb');}
+    else if(type==='down'){if(target.plugin.hm.active&&target.plugin.hm.kind==='car'&&target.plugin.hm.tier>0){const tier=target.plugin.hm.tier-1,pos={...target.position},vel={...target.velocity},spin=target.angularVelocity;removeEntity(target);const bb=newBody({kind:'car',tier},clamp(pos.x,radius({kind:'car',tier})+2,W-radius({kind:'car',tier})-2),pos.y,{velocity:vel,spin,popUntil:now()+200});sparkle(bb.position.x,bb.position.y,'#9873CE',17);floating(bb.position.x,bb.position.y-19,'LEVEL DOWN!','#805dbd',14);}else sparkle(pt.x,pt.y,'#9873CE',5);playSound('down');}
+    removeEntity(item);
+  }
+  const merges=state.pendingMerges;state.pendingMerges=[];
+  for(const [a,b] of merges){if(!a.plugin.hm.active||!b.plugin.hm.active||a.plugin.hm.kind!=='car'||b.plugin.hm.kind!=='car'||a.plugin.hm.tier!==b.plugin.hm.tier||a.plugin.hm.tier>=8)continue;
+    const tier=a.plugin.hm.tier+1,ent={kind:'car',tier},r=radius(ent),x=clamp((a.position.x+b.position.x)/2,r+2,W-r-2),y=clamp((a.position.y+b.position.y)/2,r+8,FLOOR-r-1);
+    const v={x:(a.velocity.x+b.velocity.x)/2,y:(a.velocity.y+b.velocity.y)/2-1.1},sp=(a.angularVelocity+b.angularVelocity)/2;
+    removeEntity(a);removeEntity(b);const c=newBody(ent,x,y,{velocity:v,spin:sp,popUntil:now()+190});state.score+=CARS[tier].score;state.maxTier=Math.max(state.maxTier,tier);saveBest();
+    const t=now();state.combo=t-state.lastMerge<=1500?state.combo+1:1;state.lastMerge=t;
+    sparkle(x,y,CARS[tier].color,14+Math.min(22,state.combo*4),1.2);pulse(x,y,CARS[tier].color,25);floating(x,y-20,`+${CARS[tier].score}`,CARS[tier].color,20);
+    if(state.combo>1){floating(W/2,90,`COMBO x${state.combo}`,'#ec5e85',21+Math.min(12,state.combo*2));playSound('combo');}else playSound('merge');
+    if(tier===8&&!state.firstUniverse){state.firstUniverse=true;floating(W/2,214,'UNIVERSE COMPLETE!','#b88b25',24);for(let i=0;i<5;i++)sparkle(50+Math.random()*320,130+Math.random()*350,'#e9bd50',20,1.8);playSound('universe');}
+    updateStats();
+  }
+}
+function resetGame(){state.engine=createEngine();state.serial=0;state.forcedNormalUntil=-1;state.drops=0;state.spawnX=W/2;state.lastDropAt=-99999;state.score=0;state.maxTier=0;state.combo=0;state.lastMerge=-99999;state.firstUniverse=false;state.newRecordShown=false;state.risk=0;state.riskOn=false;state.particles=[];state.pulses=[];state.floating=[];state.pendingItems.clear();state.pendingMerges=[];state.current=generateEntry();state.next=generateEntry();state.mode='playing';$('gameOverlay').classList.add('hidden');$('pauseBtn').textContent='Ⅱ';updateStats();drawNext();updateGrowth();}
+function updateStats(){$('scoreLeft').textContent=state.score.toLocaleString();$('bestLeft').textContent=state.best.toLocaleString();$('scoreMobile').textContent=state.score.toLocaleString();$('bestMobile').textContent=state.best.toLocaleString();updateGrowth();}
+function viewOverlay(icon,title,desc,button,extra='',score=null){$('overlayIcon').textContent=icon;$('overlayTitle').textContent=title;$('overlayDesc').textContent=desc;$('overlayButton').textContent=button;$('overlayExtra').textContent=extra;$('overlayScore').style.display=score===null?'none':'block';if(score!==null)$('overlayScore').textContent=score.toLocaleString()+'점';$('gameOverlay').classList.remove('hidden');}
+function showPaused(){state.mode='paused';$('pauseBtn').textContent='▶';viewOverlay('⏸️','잠깐 쉬어갈까?','자동차는 그대로 멈춰 있어요. 이어서 합쳐봐!','계속하기','P 키로도 재개할 수 있어요.');}
+function togglePause(){if(state.mode==='playing')showPaused();else if(state.mode==='paused'){state.mode='playing';$('gameOverlay').classList.add('hidden');$('pauseBtn').textContent='Ⅱ';}}
+function endGame(){if(state.mode!=='playing')return;state.mode='over';saveBest();playSound('over');state.cameraShake=6;const bestName=CARS[state.maxTier].name;viewOverlay('💥','GAME OVER',`이번 판의 최고 자동차는 ${bestName}! 빨간 선 위로 2초 이상 쌓였어요.`,'다시 도전하기 🚗',`🏆 최고 점수 ${state.best.toLocaleString()}점 · 달성 단계 ${state.maxTier+1}/9`,state.score);}
+function drop(){if(state.mode!=='playing'||!state.current||now()-state.lastDropAt<450)return false;const ent=state.current,r=radius(ent);const b=newBody(ent,clamp(state.spawnX,r+2,W-r-2),Math.max(65,r+17));Body.setAngularVelocity(b,(Math.random()-.5)*.025);state.drops++;if(ent.kind==='car')state.maxTier=Math.max(state.maxTier,ent.tier);state.lastDropAt=now();state.current=state.next;state.next=generateEntry();state.spawnX=clamp(state.spawnX,radius(state.current)+3,W-radius(state.current)-3);playSound('drop');drawNext();return true;}
+function updateRisk(dt){let danger=false;const t=now();for(const b of state.engine.world.bodies){const m=b.plugin.hm;if(m?.kind!=='car'||!m.active)continue;if(t-m.birth<850||t-m.popUntil<280)continue;if(b.position.y-b.circleRadius<DANGER&&b.position.y>60&&b.speed<2.4){danger=true;break;}}
+  if(danger){state.risk+=dt;state.riskOn=true;if(state.risk>=2000)endGame();}else {state.risk=0;state.riskOn=false;}
+}
+function drawVehicle(c,tier,x,y,r,angle=0,opacity=1,scale=1){const car=CARS[tier];c.save();c.translate(x,y);c.rotate(angle);c.scale(scale,scale);c.globalAlpha*=opacity;
+  c.beginPath();c.ellipse(0,5,r*.91,r*.86,0,0,Math.PI*2);c.fillStyle=alpha(car.color,.19);c.fill();c.strokeStyle=alpha(car.color,.53);c.lineWidth=1.6;c.stroke();
+  const img=IMAGES[car.key];
+  if(img?.complete&&img.naturalWidth>0){const fitW=r*2.09,fitH=r*1.71,ratio=Math.min(fitW/img.naturalWidth,fitH/img.naturalHeight);const w=img.naturalWidth*ratio,h=img.naturalHeight*ratio;c.shadowColor='#122d4e39';c.shadowBlur=r*.12;c.shadowOffsetY=r*.10;c.drawImage(img,-w/2,-h/2-2,w,h);}
+  else drawFallbackVehicle(c,tier,r);
+  c.textAlign='center';c.textBaseline='middle';c.font=`900 ${Math.max(7,Math.min(13,r*.33))}px Nunito, sans-serif`;
+  c.fillStyle='#17314c';c.shadowColor='#ffffff';c.shadowBlur=3;c.fillText(car.name,0,r*.70,Math.max(30,r*1.75));c.restore();}
+function drawFallbackVehicle(c,tier,r){const col=COLORS[tier],isBus=tier===8,isTruck=tier===5||tier===6||tier===7,isSedan=tier===1||tier===2;
+  c.save();c.shadowColor='#18365135';c.shadowBlur=4;c.shadowOffsetY=3;const w=r*(isBus?1.93:isTruck?1.87:1.83),h=r*(isBus?.67:isTruck?.72:isSedan?.65:.85);
+  roundRect(c,-w/2,-h/2,w,h,h*.23);c.fillStyle=col;c.fill();c.strokeStyle=alpha('#142e47',.25);c.lineWidth=1.2;c.stroke();c.shadowBlur=0;
+  c.fillStyle='#263748';const wheelX=w*.32;for(const xx of[-wheelX,wheelX]){roundRect(c,xx-r*.13,h*.30,r*.26,r*.27,3);c.fill();}
+  c.fillStyle='#385978';if(isTruck){roundRect(c,-w*.46,-h*.32,w*.34,h*.55,3);c.fill();c.fillStyle=alpha('#ffffff',.7);c.fillRect(w*.02,-h*.23,w*.38,h*.07);}
+  else if(isBus){roundRect(c,-w*.41,-h*.29,w*.75,h*.40,4);c.fill();c.fillStyle=alpha('#ffffff',.6);for(let i=0;i<4;i++)c.fillRect(-w*.28+i*w*.17,-h*.28,2,h*.35);}
+  else {roundRect(c,-w*.20,-h*.30,w*.50,h*.48,4);c.fill();c.fillStyle='#e5f8ff';c.fillRect(-w*.47,h*.04,w*.05,h*.1);}
+  c.restore();}
+function drawHorse(c,r){c.save();c.scale(r/23,r/23);c.fillStyle='#c98554';roundRect(c,-15,-8,26,22,8);c.fill();roundRect(c,-19,-18,19,24,8);c.fill();c.fillStyle='#88512f';c.beginPath();c.moveTo(-18,-12);c.lineTo(-15,-29);c.lineTo(-9,-18);c.lineTo(-4,-27);c.lineTo(0,-16);c.fill();c.fillStyle='#e5b088';roundRect(c,-20,-3,17,13,6);c.fill();c.fillStyle='#17283a';c.beginPath();c.arc(-12,-11,2.4,0,Math.PI*2);c.fill();for(const x of[-8,6]){c.fillStyle='#865332';roundRect(c,x,10,6,13,3);c.fill();}c.restore();}
+function drawItem(c,item,x,y,r,angle=0,opacity=1){c.save();c.translate(x,y);c.rotate(angle);c.globalAlpha*=opacity;c.shadowColor='#12385f30';c.shadowBlur=10;c.shadowOffsetY=4;
+  c.beginPath();c.arc(0,0,r,0,Math.PI*2);c.fillStyle=ITEMS[item].color;c.fill();c.strokeStyle='#ffffff';c.lineWidth=2;c.stroke();c.shadowBlur=0;
+  if(item==='horse'){drawHorse(c,r*.82);}else if(item==='bomb'){c.fillStyle='#ef454e';c.beginPath();c.arc(0,4,r*.67,0,Math.PI*2);c.fill();c.fillStyle='#2e3346';roundRect(c,-4,-r*.87,8,11,2);c.fill();c.strokeStyle='#ffd364';c.lineWidth=2;c.beginPath();c.moveTo(0,-r*.66);c.quadraticCurveTo(r*.2,-r*1.13,r*.47,-r*.95);c.stroke();c.fillStyle='#ffadb3';c.beginPath();c.arc(-r*.25,-r*.17,r*.18,0,Math.PI*2);c.fill();}
+  else {c.strokeStyle='#fff';c.lineWidth=5;c.lineCap='round';c.lineJoin='round';c.beginPath();c.moveTo(0,-r*.56);c.lineTo(0,r*.40);c.moveTo(-r*.40,r*.05);c.lineTo(0,r*.47);c.lineTo(r*.40,r*.05);c.stroke();}
+  c.restore();}
+function drawEntry(c,entry,x,y,r,angle=0,opacity=1,scale=1){if(entry.kind==='car')drawVehicle(c,entry.tier,x,y,r,angle,opacity,scale);else drawItem(c,entry.item,x,y,r*scale,angle,opacity);}
+function drawNext(){if(!state.next)return;nctx.clearRect(0,0,240,190);const e=state.next;drawEntry(nctx,e,120,87,Math.min(62,radius(e)*1.75),0,1,1);$('nextName').textContent=e.kind==='car'?CARS[e.tier].name:ITEMS[e.item].name+' 아이템';$('nextDesc').textContent=e.kind==='item'?ITEMS[e.item].desc:'동일 차종 2대 → 합성';}
+function updateGrowth(){for(const id of['growthList','mobileGrowthList']){const parent=$(id);if(!parent)return;if(!parent.children.length){parent.innerHTML=CARS.map((c,i)=>`<div class="growth-step" data-tier="${i}"><span class="grow-num">${i+1}</span><img class="grow-preview" src="${(window.__IMAGE_OVERRIDES__||{})[c.key]||c.file}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'"/><span class="grow-fallback" style="display:none;width:56px;height:33px;background:${alpha(c.color,.25)}">🚗</span><span class="grow-name">${c.name}</span><span class="grow-score">${i?`+${c.score}`:'START'}</span></div>`).join('');}for(const el of parent.children){el.classList.toggle('reached',+el.dataset.tier<=state.maxTier);}}}
+function drawBackground(){ctx.fillStyle='#eff8ff';ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.strokeStyle='#d4e8f6';ctx.lineWidth=1;ctx.globalAlpha=.75;for(let x=20;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(let y=18;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}ctx.restore();
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#fafcff');g.addColorStop(1,'#f5fbff');ctx.fillStyle=g;ctx.globalAlpha=.58;ctx.fillRect(0,0,W,H);ctx.globalAlpha=1;
+  ctx.fillStyle='#cae0f2';roundRect(ctx,0,0,8,H,5);ctx.fill();roundRect(ctx,W-8,0,8,H,5);ctx.fill();
+  ctx.fillStyle='#d4e4f3';ctx.fillRect(0,FLOOR,W,H-FLOOR);ctx.strokeStyle='#9bbbd4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,FLOOR);ctx.lineTo(W,FLOOR);ctx.stroke();
+  ctx.save();ctx.beginPath();ctx.setLineDash([9,7]);ctx.strokeStyle=state.riskOn?'#e64f65':'#f1a6a6';ctx.lineWidth=state.riskOn?3.5:2;ctx.moveTo(9,DANGER);ctx.lineTo(W-9,DANGER);ctx.stroke();ctx.setLineDash([]);ctx.textAlign='left';ctx.fillStyle=state.riskOn?'#ce394b':'#cc858f';ctx.font='800 11px Nunito,sans-serif';ctx.fillText('⚠ DANGER LINE',16,DANGER-9);ctx.restore();
+  if(state.risk>0){ctx.fillStyle='#e15a6d';ctx.fillRect(0,DANGER-3,W*(state.risk/2000),5);}
+}
+function drawDecorations(t){ctx.save();ctx.translate(state.cameraShake?(Math.random()-.5)*state.cameraShake:0,state.cameraShake?(Math.random()-.5)*state.cameraShake:0);
+  const bodies=state.engine?.world?.bodies||[];for(const b of bodies){const hm=b.plugin.hm;if(!hm?.active||hm.kind==='wall'||hm.kind==='floor')continue;
+    const grow=hm.popUntil>now()?1.12+Math.sin(now()/40)*.08:1;
+    drawEntry(ctx,hm,b.position.x,b.position.y,b.circleRadius,b.angle,1,grow);
+  }ctx.restore();
+  if(state.mode==='playing'&&state.current){const ent=state.current,r=radius(ent),x=clamp(state.spawnX,r+2,W-r-2),y=Math.max(65,r+17);
+    ctx.save();ctx.strokeStyle='#8caac8';ctx.lineWidth=1.5;ctx.setLineDash([5,7]);ctx.beginPath();ctx.moveTo(x,y+r*.75);ctx.lineTo(x,FLOOR-2);ctx.stroke();ctx.setLineDash([]);ctx.restore();
+    drawEntry(ctx,ent,x,y,r,0,.85);
+  }
+  for(const p of state.pulses){ctx.beginPath();ctx.arc(p.x,p.y,p.r*(1-p.life*.5),0,Math.PI*2);ctx.strokeStyle=alpha(p.color,Math.max(0,p.life));ctx.lineWidth=3;ctx.stroke();}
+  for(const p of state.particles){ctx.fillStyle=alpha(p.color,clamp(p.life,0,1));ctx.beginPath();ctx.arc(p.x,p.y,p.size*Math.max(.2,p.life),0,Math.PI*2);ctx.fill();}
+  for(const p of state.floating){ctx.save();ctx.globalAlpha=clamp(p.life,0,1);ctx.font=`900 ${p.size}px Nunito,'Noto Sans KR',sans-serif`;ctx.textAlign='center';ctx.shadowColor='#fff';ctx.shadowBlur=9;ctx.fillStyle=p.color;ctx.fillText(p.str,p.x,p.y);ctx.restore();}
+  state.cameraShake*=.82;if(state.cameraShake<.5)state.cameraShake=0;
+}
+function effectsUpdate(dt){const f=dt/16.667;for(const p of state.particles){p.x+=p.vx*f;p.y+=p.vy*f;p.vy+=.06*f;p.life-=dt/750;}for(const p of state.floating){p.y-=.48*f;p.life-=dt/950;}for(const p of state.pulses)p.life-=dt/460;state.particles=state.particles.filter(p=>p.life>0);state.floating=state.floating.filter(p=>p.life>0);state.pulses=state.pulses.filter(p=>p.life>0);}
+let lastRAF=0,acc=0;function frame(t){requestAnimationFrame(frame);if(!lastRAF)lastRAF=t;const delta=Math.min(50,t-lastRAF);lastRAF=t;if(state.mode==='playing'){
+  acc=Math.min(70,acc+delta);while(acc>=STEP){if(state.keys.has('ArrowLeft')||state.keys.has('KeyA')||state.controlDir<0)state.spawnX-=4.7;if(state.keys.has('ArrowRight')||state.keys.has('KeyD')||state.controlDir>0)state.spawnX+=4.7;if(state.current)state.spawnX=clamp(state.spawnX,radius(state.current)+2,W-radius(state.current)-2);
+    Engine.update(state.engine,STEP);processEffects();updateRisk(STEP);acc-=STEP;
+    if(state.mode!=='playing')break;
+  }
+  effectsUpdate(delta);
+}
+  ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,W,H);drawBackground();drawDecorations(t);
+}
+function boardX(ev){const rect=canvas.getBoundingClientRect();return (ev.clientX-rect.left)*(W/rect.width);}
+let touchActive=false;canvas.addEventListener('pointerdown',e=>{if(state.mode!=='playing')return;e.preventDefault();canvas.setPointerCapture?.(e.pointerId);state.spawnX=clamp(boardX(e),radius(state.current)+2,W-radius(state.current)-2);touchActive=true;});
+canvas.addEventListener('pointermove',e=>{if(state.mode!=='playing'||!state.current)return;if(e.pointerType==='mouse'||touchActive)state.spawnX=clamp(boardX(e),radius(state.current)+2,W-radius(state.current)-2);});
+canvas.addEventListener('pointerup',e=>{if(!touchActive)return;e.preventDefault();touchActive=false;drop();});
+canvas.addEventListener('pointercancel',()=>{touchActive=false;});
+window.addEventListener('keydown',e=>{const blocked=['ArrowLeft','ArrowRight','ArrowDown','Space','KeyA','KeyD','KeyP','KeyR'];if(blocked.includes(e.code))e.preventDefault();if(['ArrowLeft','ArrowRight','KeyA','KeyD'].includes(e.code)){state.keys.add(e.code);if(state.mode==='playing'&&state.current){state.spawnX+=['ArrowLeft','KeyA'].includes(e.code)?-9:9;state.spawnX=clamp(state.spawnX,radius(state.current)+2,W-radius(state.current)-2);}return;}if(e.repeat)return;if(e.code==='Space'||e.code==='ArrowDown'){if(state.mode==='playing')drop();else if(state.mode==='ready')resetGame();}if(e.code==='KeyP')togglePause();if(e.code==='KeyR'&&confirm('지금 게임을 처음부터 다시 시작할까요?'))resetGame();});
+window.addEventListener('keyup',e=>{state.keys.delete(e.code);});window.addEventListener('blur',()=>{state.keys.clear();state.controlDir=0;if(state.mode==='playing')showPaused();});
+function bindArrow(id,d){const el=$(id);el.addEventListener('pointerdown',e=>{e.preventDefault();el.setPointerCapture?.(e.pointerId);state.controlDir=d;if(state.current)state.spawnX=clamp(state.spawnX+d*10,radius(state.current)+2,W-radius(state.current)-2);});for(const ev of['pointerup','pointercancel','lostpointercapture'])el.addEventListener(ev,()=>state.controlDir=0);}
+bindArrow('leftBtn',-1);bindArrow('rightBtn',1);$('dropBtn').addEventListener('pointerdown',e=>{e.preventDefault();drop();});
+$('pauseBtn').addEventListener('click',()=>{if(state.mode==='ready'||state.mode==='over')return;togglePause();});
+$('restartBtn').addEventListener('click',()=>{if(confirm('현재 게임을 처음부터 다시 시작할까요?'))resetGame();});
+$('muteBtn').addEventListener('click',()=>{state.muted=!state.muted;$('muteBtn').textContent=state.muted?'♪̸':'♫';$('muteBtn').setAttribute('aria-label',state.muted?'소리 켜기':'소리 끄기');});
+$('overlayButton').addEventListener('click',()=>{if(state.mode==='paused')togglePause();else resetGame();});
+loadImages();state.engine=createEngine();state.current=generateEntry();state.next=generateEntry();drawNext();updateStats();requestAnimationFrame(frame);
+window.__HM_DEBUG__={state,reset:resetGame,drop,create:(tier,x=210,y=100)=>newBody({kind:'car',tier},x,y),tick:(n=1)=>{for(let i=0;i<n;i++){Engine.update(state.engine,STEP);processEffects();updateRisk(STEP);}},get bodies(){return state.engine.world.bodies.filter(b=>b.plugin.hm?.active);}};
+</script>
+</body>
+</html>
