@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:"
+    />
+    <title>차례차례 타이머</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div>
+        <span class="eyebrow">ONE THING AT A TIME</span>
+        <h1>차례차례 타이머 <span>●</span></h1>
+        <p>할 일은 적어두고, 지금은 하나에만 집중하세요.</p>
+      </div>
+      <button id="test" class="quiet">♬ 알림 테스트</button>
+    </header>
+    <main>
+      <section class="focus">
+        <span class="eyebrow" id="phase">READY TO FOCUS</span>
+        <h2 id="current">오늘의 순서를 만들어보세요</h2>
+        <div id="clock">00:00</div>
+        <p id="next">할 일을 추가하고 시작을 눌러주세요.</p>
+        <div class="controls">
+          <button id="start" class="primary">시작하기</button
+          ><button id="extend">+5분</button
+          ><button id="skip">다음으로 →</button>
+        </div>
+        <button id="reset" class="quiet">처음부터 다시</button>
+        <div class="note">
+          창을 닫아도 트레이에서 계속 실행돼요.<br />완전히 종료하려면 트레이
+          아이콘을 우클릭하세요.
+        </div>
+      </section>
+      <section class="plan">
+        <div class="heading">
+          <h2>오늘의 순서</h2>
+          <span id="total">0개 · 0분</span>
+        </div>
+        <form id="add">
+          <label
+            >할 일<input
+              id="title"
+              maxlength="120"
+              placeholder="예: 지원서 작성"
+              required /></label
+          ><label class="minutes"
+            >예상 시간 (분)<input
+              id="minutes"
+              type="number"
+              min="1"
+              max="1440"
+              value="25"
+              required /></label
+          ><button class="primary" type="submit">추가</button>
+        </form>
+        <p id="editNote">
+          진행 중에는 목록이 잠겨요. 초기화하면 수정할 수 있어요.
+        </p>
+        <ol id="tasks"></ol>
+        <p id="empty">
+          아직 비어 있어요.<br />작은 할 일 하나부터 시작해볼까요?
+        </p>
+      </section>
+    </main>
+    <footer>
+      <span>목록은 이 컴퓨터에 자동 저장됩니다.</span
+      ><span id="message" role="status"></span>
+    </footer>
+    <script src="renderer.js"></script>
+  </body>
+</html>

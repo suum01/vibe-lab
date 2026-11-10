@@ -1,0 +1,43 @@
+{
+  "name": "sequence-timer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sequential desktop task timer",
+  "author": "suum01",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.suum01.sequence-timer",
+    "productName": "차례차례 타이머",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "*.cjs",
+      "*.html",
+      "*.css",
+      "renderer.js"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suum01/vibe-lab.git",
+    "directory": "apps/sequence-timer"
+  }
+}

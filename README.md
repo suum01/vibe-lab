@@ -8,6 +8,7 @@ AI와 함께 아이디어를 구체화하고 직접 만들고 실험한 작업�
 
 | 분류 | 내용 |
 | --- | --- |
+| [apps](apps/) | 일정과 예상 시간을 순서대로 실행하는 Windows용 차례차례 타이머 |
 | [game](game/) | 자동차 방탈출, 현대자동차 수박게임, 인제 카트레이싱 |
 
 ## 저장소 구조
@@ -15,6 +16,8 @@ AI와 함께 아이디어를 구체화하고 직접 만들고 실험한 작업�
 ```text
 vibe-lab/
 ├── README.md
+├── apps/
+│   └── sequence-timer/    # Windows 설치형 일정 타이머
 └── game/
     ├── README.md
     ├── locked-car-escape/   # 내 차에서 나 좀 꺼내줘!
